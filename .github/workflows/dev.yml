@@ -6,7 +6,6 @@ on:
       - dev
 
 env:
-  AZURE_RG_TEST: Rg-Test-ARM
   AZURE_LOCATION: westeurope
   AZURE_RG: Rg-github-Becep-Stockage
 
@@ -49,15 +48,20 @@ jobs:
         with:    
           creds: ${{ secrets.AZURE_CREDENTIALS }}          
 
-      - name: Creation du RG
+      - name: Creation du RG check Template ARM
         uses: azure/CLI@v1
         with:
           azcliversion: 2.17.1
           inlineScript: |
-            az group create --name ${{ env.AZURE_RG_TEST }} --location ${{ env.AZURE_LOCATION }}
-            az deployment group validate --resource-group ${{ env.AZURE_RG_TEST }} --template-file ./templateArtifacts/main.json
+            az group create --name ${{ env.AZURE_RG }} --location ${{ env.AZURE_LOCATION }}
+            az deployment group validate --resource-group ${{ env.AZURE_RG }} --template-file ./templateArtifacts/main.json
 
-      
+      - name: What-if Template ARM
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.17.1
+          inlineScript: |
+            az deployment group what-if --resource-group ${{ env.AZURE_RG }} --name rollout01 --template-file ./templateArtifacts/main.json                  
 
   Deploy-Test:
     needs: Check-Template
