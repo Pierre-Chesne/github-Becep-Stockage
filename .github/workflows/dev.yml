@@ -33,6 +33,11 @@ jobs:
     runs-on: windows-2019    
 
     steps:
+
+      - name: Creation dossier Artifact
+        run: |
+          mkdir templateArtifacts
+
       - name: Recuperation de artefact
         uses: actions/download-artifact@v2
 
@@ -58,7 +63,7 @@ jobs:
           inlineScript: |
             $Parameters = @{
               ResourcegroupName     = "${{ env.AZURE_RG_TEST }}"
-              Templatefile          = "./Becep/main.json"              
+              Templatefile          = "./templateArtifacts/main.json"              
               mode                  = "Incremental"
             }
             $Result = Get-AzResourceGroupDeploymentWhatIfResult @Parameters
