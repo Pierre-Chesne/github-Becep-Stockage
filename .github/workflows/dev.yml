@@ -18,10 +18,11 @@ jobs:
       - name: Recuperation du repo
         uses: actions/checkout@v2
 
-      - name: Run de Becep
-        uses: aliencube/bicep-build-actions@v0.1
-        with:
-          files: Becep/main.bicep
+      - name: Installation de Bicep :-)
+        run: |
+          curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
+          chmod +x ./bicep
+          sudo mv ./bicep /usr/local/bin/bicep
 
       - name: Publish ARM template artifact
         uses: actions/upload-artifact@v1

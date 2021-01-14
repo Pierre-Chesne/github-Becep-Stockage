@@ -8,7 +8,4 @@ resource storage001 'Microsoft.Storage/storageAccounts@2019-06-01' = {
   sku:{
     name:'Standard_LRS'
   }
-  tags:{
-    'BU':'78300'
-  }
 }
