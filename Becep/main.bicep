@@ -1,4 +1,4 @@
-param name string = 'bicepstorage0007'
+param name string = 'bicepstorage00007'
 param location string = 'westeurope'
 
 resource storage001 'Microsoft.Storage/storageAccounts@2019-06-01' = {
