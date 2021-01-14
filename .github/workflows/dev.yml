@@ -1,0 +1,21 @@
+name: Deploiement compte de stockage avec Bicep
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  Build:
+    runs-on: ubuntu-20.04
+
+    steps:
+
+      - name: Recuperation du repo
+        uses: actions/checkout@v2
+
+      - name: Run de Becep
+        uses: aliencube/bicep-build-actions@v0.1
+        with:
+          files: Becep/main.bicep
+        
