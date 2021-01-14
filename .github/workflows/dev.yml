@@ -104,7 +104,6 @@ jobs:
           scope: resourcegroup
           subscriptionId: ${{ secrets.AZURE_IDSUBSCRIPTION }}
           resourceGroupName: ${{ env.AZURE_RG }}
-          template: ./templateArtifacts/azuredeploy.json
-          parameters: ./templateArtifacts/azuredeploy.parameters.json
+          template: ./templateArtifacts/main.json          
           deploymentName: Deployment-001
           deploymentMode: Incremental
