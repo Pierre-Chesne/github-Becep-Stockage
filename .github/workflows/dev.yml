@@ -39,7 +39,7 @@ jobs:
         with:
           azcliversion: 2.0.72
           inlineScript: |
-            az group create --name ${{ env.AZURE_RG_TEST }} --location ${{ env.AZURE_LOCATION }}
+            az deployment mg what-if --management-group-id test001 --location westeurope --name rollout01 --template-file ./arm_template/main.json
 
   Test:
     needs: Build
