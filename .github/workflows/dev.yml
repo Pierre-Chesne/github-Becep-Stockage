@@ -18,4 +18,10 @@ jobs:
         uses: aliencube/bicep-build-actions@v0.1
         with:
           files: Becep/main.bicep
+
+      - name: Publish ARM template artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: arm_template
+          path: ./IaC
         
