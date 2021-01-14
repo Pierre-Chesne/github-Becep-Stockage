@@ -33,14 +33,28 @@ jobs:
         uses: Azure/login@v1
         with:    
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+          enable-AzPSSession: true
 
-      - name: Creation du RG pour le test
-        uses: azure/CLI@v1
+      - name: Creation du RG pour le check du template ARM
+        uses: Azure/powershell@v1
         with:
-          azcliversion: 2.0.72
           inlineScript: |
-            az deployment mg what-if --management-group-id test001 --location westeurope --name rollout01 --template-file ./arm_template/main.json
+              New-AzResourceGroup -Name ${{ env.AZURE_RG_TEST }} -Location ${{ env.AZURE_LOCATION }} -Force            
+          azPSVersion: '3.1.0'    
 
+      - name: Check Template ARM
+        uses: Azure/powershell@v1
+        with:
+          inlineScript: |
+            $Parameters = @{
+              ResourcegroupName     = "${{ env.AZURE_RG_TEST }}"
+              Templatefile          = "./Becep/main.json"              
+              mode                  = "Incremental"
+            }
+            $Result = Get-AzResourceGroupDeploymentWhatIfResult @Parameters
+            $result
+          azPSVersion: '3.1.0'
+      
   Test:
     needs: Build
     runs-on: ubuntu-20.04    
