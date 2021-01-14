@@ -24,10 +24,15 @@ jobs:
           name: arm_template
           path: ./Becep/main.json
 
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:    
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          enable-AzPSSession: true
+
   Test:
     needs: Build
-    runs-on: ubuntu-20.04
-    
+    runs-on: ubuntu-20.04    
 
     steps:
       - name: Recuperation de artefact
