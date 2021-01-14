@@ -23,5 +23,5 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: arm_template
-          path: ./IaC
+          path: ./Becep/main.json
         
