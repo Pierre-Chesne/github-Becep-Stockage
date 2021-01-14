@@ -107,3 +107,6 @@ jobs:
           template: ./templateArtifacts/main.json          
           deploymentName: Deployment-001
           deploymentMode: Incremental
+
+
+    
