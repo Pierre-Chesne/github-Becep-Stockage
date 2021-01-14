@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-
       - name: Recuperation du repo
         uses: actions/checkout@v2
 
@@ -24,4 +23,15 @@ jobs:
         with:
           name: arm_template
           path: ./Becep/main.json
+
+  Test:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Recuperation de artefact
+        uses: actions/download-artifact@v2
+
+      - name: Check artefact
+        run: ls -R 
+
         
