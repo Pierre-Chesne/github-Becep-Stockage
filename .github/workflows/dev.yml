@@ -8,6 +8,7 @@ on:
 env:
   AZURE_RG_TEST: Rg-Test-ARM
   AZURE_LOCATION: westeurope
+  AZURE_RG: Rg-github-Becep-Stockage
 
 jobs:
   Build:
@@ -33,7 +34,6 @@ jobs:
     runs-on: windows-2019    
 
     steps:
-
       - name: Creation dossier Artifact
         run: |
           mkdir templateArtifacts
@@ -43,9 +43,6 @@ jobs:
         with:
           name: arm_template
           path: templateArtifacts/
-
-      - name: Check artefact
-        run: ls -R
 
       - name: Azure Login
         uses: Azure/login@v1
@@ -72,3 +69,41 @@ jobs:
             $Result = Get-AzResourceGroupDeploymentWhatIfResult @Parameters
             $result
           azPSVersion: '3.1.0'
+
+  Deploy-Test:
+    needs: Test
+    runs-on: ubuntu-20.04
+    environment:
+      name: dev
+
+      - name: Creation dossier Artifact
+        run: |
+          mkdir templateArtifacts
+
+      - name: Recuperation de artefact
+        uses: actions/download-artifact@v2
+        with:
+          name: arm_template
+          path: templateArtifacts/
+
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:    
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          
+      - name: Creation du RG
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.0.72
+          inlineScript: |
+            az group create --name ${{ env.AZURE_RG }} --location ${{ env.AZURE_LOCATION }}
+      - name: Deploiement du template ARM
+        uses: azure/arm-deploy@v1
+        with:
+          scope: resourcegroup
+          subscriptionId: ${{ secrets.AZURE_IDSUBSCRIPTION }}
+          resourceGroupName: ${{ env.AZURE_RG }}
+          template: ./templateArtifacts/azuredeploy.json
+          parameters: ./templateArtifacts/azuredeploy.parameters.json
+          deploymentName: Deployment-001
+          deploymentMode: Incremental
