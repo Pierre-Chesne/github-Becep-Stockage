@@ -40,6 +40,9 @@ jobs:
 
       - name: Recuperation de artefact
         uses: actions/download-artifact@v2
+        with:
+          name: arm_template
+          path: templateArtifacts/
 
       - name: Check artefact
         run: ls -R
