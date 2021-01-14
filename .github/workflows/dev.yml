@@ -5,6 +5,11 @@ on:
     branches:
       - dev
 
+env:
+  AZURE_RG_TEST: Rg-Test-ARM
+  AZURE_LOCATION: westeurope
+
+
 jobs:
   Build:
     runs-on: ubuntu-20.04
@@ -28,7 +33,13 @@ jobs:
         uses: Azure/login@v1
         with:    
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-          enable-AzPSSession: true
+
+      - name: Creation du RG pour le test
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.0.72
+          inlineScript: |
+            az group create --name ${{ env.AZURE_RG_TEST }} --location ${{ env.AZURE_LOCATION }}
 
   Test:
     needs: Build
