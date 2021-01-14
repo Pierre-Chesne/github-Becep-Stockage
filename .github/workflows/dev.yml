@@ -9,7 +9,6 @@ env:
   AZURE_RG_TEST: Rg-Test-ARM
   AZURE_LOCATION: westeurope
 
-
 jobs:
   Build:
     runs-on: ubuntu-20.04
@@ -28,6 +27,17 @@ jobs:
         with:
           name: arm_template
           path: ./Becep/main.json
+      
+  Test:
+    needs: Build
+    runs-on: windows-2019    
+
+    steps:
+      - name: Recuperation de artefact
+        uses: actions/download-artifact@v2
+
+      - name: Check artefact
+        run: ls -R
 
       - name: Azure Login
         uses: Azure/login@v1
@@ -40,7 +50,7 @@ jobs:
         with:
           inlineScript: |
               New-AzResourceGroup -Name ${{ env.AZURE_RG_TEST }} -Location ${{ env.AZURE_LOCATION }} -Force            
-          azPSVersion: '3.1.0'    
+          azPSVersion: '3.1.0'
 
       - name: Check Template ARM
         uses: Azure/powershell@v1
@@ -54,14 +64,3 @@ jobs:
             $Result = Get-AzResourceGroupDeploymentWhatIfResult @Parameters
             $result
           azPSVersion: '3.1.0'
-      
-  Test:
-    needs: Build
-    runs-on: ubuntu-20.04    
-
-    steps:
-      - name: Recuperation de artefact
-        uses: actions/download-artifact@v2
-
-      - name: Check artefact
-        run: ls -R        
