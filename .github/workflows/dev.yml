@@ -31,7 +31,7 @@ jobs:
       
   Check-Template:
     needs: Build
-    runs-on: windows-2019    
+    runs-on: ubuntu-20.04    
 
     steps:
       - name: Creation dossier Artifact
@@ -47,28 +47,23 @@ jobs:
       - name: Azure Login
         uses: Azure/login@v1
         with:    
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-          enable-AzPSSession: true
+          creds: ${{ secrets.AZURE_CREDENTIALS }}          
 
-      - name: Creation du RG pour le check du template ARM
-        uses: Azure/powershell@v1
+      - name: Creation du RG
+        uses: azure/CLI@v1
         with:
+          azcliversion: 2.0.72
           inlineScript: |
-              New-AzResourceGroup -Name ${{ env.AZURE_RG_TEST }} -Location ${{ env.AZURE_LOCATION }} -Force            
-          azPSVersion: '3.1.0'
+            az group create --name ${{ env.AZURE_RG_TEST }} --location ${{ env.AZURE_LOCATION }}
+
 
       - name: Check Template ARM
-        uses: Azure/powershell@v1
+        uses: azure/CLI@v1
         with:
+          azcliversion: 2.0.72
           inlineScript: |
-            $Parameters = @{
-              ResourcegroupName     = "${{ env.AZURE_RG_TEST }}"
-              Templatefile          = "./templateArtifacts/main.json"              
-              mode                  = "Incremental"
-            }
-            $Result = Get-AzResourceGroupDeploymentWhatIfResult @Parameters
-            $result
-          azPSVersion: '3.1.0'
+            az deployment group validate --resource-group Rg-Test-ARM --template-file ./templateArtifacts/main.json
+
 
   Deploy-Test:
     needs: Check-Template
