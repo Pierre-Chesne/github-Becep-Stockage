@@ -8,4 +8,7 @@ resource storage001 'Microsoft.Storage/storageAccounts@2019-06-01' = {
   sku:{
     name:'Standard_LRS'
   }
+  tags:{
+    'Cost Center':'[78300]'
+  }
 }
