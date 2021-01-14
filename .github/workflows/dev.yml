@@ -73,9 +73,7 @@ jobs:
   Deploy-Test:
     needs: Test
     runs-on: ubuntu-20.04
-    environment:
-      name: dev
-
+    
       - name: Creation dossier Artifact
         run: |
           mkdir templateArtifacts
