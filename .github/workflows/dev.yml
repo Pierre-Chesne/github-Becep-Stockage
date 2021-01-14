@@ -108,5 +108,23 @@ jobs:
           deploymentName: Deployment-001
           deploymentMode: Incremental
 
-
+  Clean:
+    needs: Deploy-Test
+    runs-on: ubuntu-20.04
+    environment:
+      name: dev
     
+    steps:
+
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:    
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Suppression des RGs
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.0.72
+          inlineScript: |
+            az group delete --name ${{ env.AZURE_RG_TEST }} --yes
+            az group delete --name ${{ env.AZURE_RG }} --yes
