@@ -25,7 +25,9 @@ jobs:
           path: ./Becep/main.json
 
   Test:
+    needs: Build
     runs-on: ubuntu-20.04
+    
 
     steps:
       - name: Recuperation de artefact
