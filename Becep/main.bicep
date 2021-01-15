@@ -1,5 +1,6 @@
 param name string = 'bicepstorage00007'
 param location string = 'westeurope'
+param number string = '78300'
 
 resource storage001 'Microsoft.Storage/storageAccounts@2019-06-01' = {
   name: name
@@ -9,6 +10,6 @@ resource storage001 'Microsoft.Storage/storageAccounts@2019-06-01' = {
     name:'Standard_LRS'
   }
   tags:{
-    'Cost Center':'78300'
+    'Cost Center': number
   }
 }
